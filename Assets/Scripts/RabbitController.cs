@@ -29,8 +29,8 @@ public class RabbitController : MonoBehaviour
         // run the 'timer' meathod every second
         InvokeRepeating("timer", 1f , 1f );
 
-        // make creature move to random position
-        RandomPosition();
+        
+
     }
 
     
@@ -40,14 +40,27 @@ public class RabbitController : MonoBehaviour
 
         if (time >= randomTime)
         {
-            // every frame chack if the time the creature has waited has surpassed the random max wait time if so reset the random time and the wait time then..
-            randomTime = Random.Range(3, 8);
-            time = 0;
+            
 
 
             //..calculate a random position and move the creature to it
             RandomPosition();
-            agent.SetDestination(movePos);
+
+            NavMeshPath path = new NavMeshPath();
+
+            if (agent.CalculatePath(movePos, path) && path.status == NavMeshPathStatus.PathComplete)
+            {
+                //move to target
+                agent.SetDestination(movePos);
+
+                // check if the time the creature has waited has surpassed the random max wait time if so reset the random time and the wait time then..
+                randomTime = Random.Range(3, 8);
+                time = 0;
+            }
+            
+            
+                
+            
 
         }
 
@@ -71,7 +84,7 @@ public class RabbitController : MonoBehaviour
 
         // change the y value of the random location to the hight of the ground at that random point
          movePos.y = Terrain.activeTerrain.SampleHeight(movePos);
-
+        Debug.Log(movePos.y);
     }
 
     public void timer()
