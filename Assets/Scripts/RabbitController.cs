@@ -8,11 +8,12 @@ public class RabbitController : MonoBehaviour
     public int rabbitHunger = 0;
     public int rabbitThirst = 0;
     public int rabbitViewDistance = 20;
+    
     public NavMeshAgent agent;
     public Animator[] animate;
+    
 
     public float time = 0;
-
     float xPos;
     float yPos;
     float zPos;
@@ -24,22 +25,25 @@ public class RabbitController : MonoBehaviour
     Vector3 movePos;
     void Start()
     {
+        
+       
+
         // Create a random time that the creature will wait for
         randomTime = Random.Range(3, 8);
 
         // Run the 'timer' meathod every second
         InvokeRepeating("timer", 1f , 1f );
 
-        
+       
 
     }
 
     
     void Update()
     {
-        
 
-        if (time >= randomTime)
+        
+            if (time >= randomTime)
         {
             
 
@@ -113,13 +117,36 @@ public class RabbitController : MonoBehaviour
 
          // Get random x and z positions within a radius
          
-xPos = Random.Range((rabbitXPos - rabbitViewDistance), (rabbitXPos + rabbitViewDistance));
+         xPos = Random.Range((rabbitXPos - rabbitViewDistance), (rabbitXPos + rabbitViewDistance));
          zPos = Random.Range((rabbitZPos - rabbitViewDistance), (rabbitZPos + rabbitViewDistance));
-         //set movPos to that location
+         
+        
+         // Check of the agent is trying to leave the map if so set its new x or z destination to the max x or z on the map.
+         if (xPos >= 154.7f)
+        {
+            xPos = Random.Range(153 - rabbitViewDistance, 153);
+        }
+         if (xPos <= 5f)
+        {
+            xPos = Random.Range(4 + rabbitViewDistance, 4);
+        }
+         if (zPos >= 154.7f)
+        {
+            zPos = Random.Range(153 - rabbitViewDistance, 153);
+        }
+         if (zPos <= 5f)
+        {
+            zPos = Random.Range(4 + rabbitViewDistance, 4);
+        }
+
+        
+         //set movPos to the previous x and z positions
          movePos = new Vector3(xPos, 0, zPos);
 
         // Change the y value of the random location to the hight of the ground at that random point
          movePos.y = Terrain.activeTerrain.SampleHeight(movePos);
+
+        
         
     }
 
@@ -149,9 +176,10 @@ xPos = Random.Range((rabbitXPos - rabbitViewDistance), (rabbitXPos + rabbitViewD
 
     }
 
-    public void isHungry()
+    
+    public void IsHungry()
     {
-        
+        // Work in progress
     }
 
 }
